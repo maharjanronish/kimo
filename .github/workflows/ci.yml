@@ -1,0 +1,81 @@
+name: build
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+    branches: ["**"]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-linux:
+    name: Linux x86_64 (ubuntu-latest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo build
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Install Chrome for Testing
+        run: |
+          set -euo pipefail
+          VER="$(curl -fsSL https://googlechromelabs.github.io/chrome-for-testing/latest-stable-versions.json | jq -r '.Stable.chrome')"
+          echo "Chrome for Testing ${VER}"
+          curl -fsSL "https://storage.googleapis.com/chrome-for-testing-public/${VER}/linux64/chrome-linux64.zip" -o /tmp/cft.zip
+          unzip -q /tmp/cft.zip -d "$HOME"
+          printf 'KIMO_CHROME_PATH=%s/chrome-linux64/chrome\n' "$HOME" >> "$GITHUB_ENV"
+
+      - name: Build (release)
+        run: cargo build --release
+
+      - name: Smoke tests (analyze + render + ffprobe verify)
+        run: bash scripts/smoke.sh target/release/kimo
+
+      - name: Pack kimo-linux-amd64.tar
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp target/release/kimo dist/kimo
+          cp README.md LICENSE dist/ 2>/dev/null || true
+          tar -cf dist/kimo-linux-amd64.tar -C dist kimo README.md LICENSE 2>/dev/null || tar -cf dist/kimo-linux-amd64.tar -C dist kimo
+          sha256sum dist/kimo-linux-amd64.tar | tee dist/kimo-linux-amd64.tar.sha256
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kimo-linux-amd64
+          path: dist/kimo-linux-amd64.tar
+          if-no-files-found: error
+
+      - name: Attach rendered sample videos
+        uses: actions/upload-artifact@v4
+        with:
+          name: kimo-sample-renders
+          path: |
+            smoke-out/*.mp4
+          if-no-files-found: ignore
+
+      - name: Release (tags v*)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/kimo-linux-amd64.tar
+            dist/kimo-linux-amd64.tar.sha256
+          generate_release_notes: true
