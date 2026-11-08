@@ -1,0 +1,28 @@
+[package]
+name = "kimo"
+version = "0.1.0"
+edition = "2021"
+description = "Pixel-exact SVG to MP4 converter driven by real Chromium (SMIL, CSS, WAAPI, JS/rAF, filters, masks, foreignObject - all rendered by Chrome itself)."
+license = "MIT"
+
+[[bin]]
+name = "kimo"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1"
+base64 = "0.22"
+clap = { version = "4", features = ["derive"] }
+fs2 = "0.4"
+futures-util = "0.3"
+percent-encoding = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "process", "io-util", "net", "time", "sync", "fs"] }
+tokio-tungstenite = "0.24"
+
+[profile.release]
+lto = "thin"
+strip = true
+codegen-units = 1

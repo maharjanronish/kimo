@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">
+  <rect width="320" height="240" fill="#101018"/>
+  <circle cx="60" cy="120" r="30" fill="#e04848">
+    <animate attributeName="cx" from="60" to="260" dur="2s" fill="freeze"/>
+  </circle>
+  <rect x="130" y="40" width="60" height="60" fill="#48b0e0">
+    <animate attributeName="opacity" from="1" to="0.1" begin="1s" dur="1.5s" fill="freeze"/>
+  </rect>
+</svg>

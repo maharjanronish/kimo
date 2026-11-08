@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="270" viewBox="0 0 480 270">
+  <rect width="480" height="270" fill="#0d0d14"/>
+  <rect id="mover" x="0" y="105" width="60" height="60" fill="#e07070"/>
+  <text id="clock" x="240" y="40" font-family="monospace" font-size="22" fill="#90e0e0" text-anchor="middle">t=?</text>
+  <script><![CDATA[
+    (function () {
+      var mover = document.getElementById('mover');
+      var clock = document.getElementById('clock');
+      var x0 = null;
+      function frame(ts) {
+        if (x0 === null) x0 = ts;
+        var t = (ts - x0) / 1000; // seconds
+        var x = 210 + 200 * Math.sin(2 * Math.PI * 0.5 * t);
+        mover.setAttribute('x', x.toFixed(2));
+        clock.textContent = 't=' + t.toFixed(3);
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })();
+  ]]></script>
+</svg>

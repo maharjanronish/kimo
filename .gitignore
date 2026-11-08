@@ -1,0 +1,6 @@
+/target
+/.kimo/
+/smoke-out/
+*.part
+*.mp4
+*.zip

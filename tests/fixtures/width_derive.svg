@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="540" viewBox="0 0 1080 1920">
+  <rect width="1080" height="1920" fill="#08131f"/>
+  <circle cx="540" cy="960" r="200" fill="#eab040">
+    <animate attributeName="cy" from="960" to="1200" dur="2s" fill="freeze"/>
+  </circle>
+</svg>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <rect width="640" height="360" fill="#12131a"/>
+  <foreignObject x="40" y="40" width="560" height="280">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <canvas id="c" width="560" height="280" style="border:1px solid #444; display:block"></canvas>
+    </div>
+  </foreignObject>
+  <script><![CDATA[
+    (function () {
+      var canvas = document.getElementById('c');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      var t0 = null;
+      function draw(ts) {
+        if (t0 === null) t0 = ts;
+        var t = (ts - t0) / 1000;
+        var w = canvas.width, h = canvas.height;
+        ctx.fillStyle = '#181926';
+        ctx.fillRect(0, 0, w, h);
+        for (var i = 0; i < 5; i++) {
+          var phase = t * (1 + i * 0.35);
+          var x = w / 2 + Math.sin(phase * 2) * (60 + i * 28);
+          var y = h / 2 + Math.cos(phase * 3) * (30 + i * 16);
+          var r = 14 + 6 * Math.sin(phase * 4);
+          ctx.fillStyle = 'hsl(' + Math.floor((i * 60 + t * 90) % 360) + ',70%,60%)';
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.fillStyle = '#cde';
+        ctx.font = '16px monospace';
+        ctx.fillText('t=' + t.toFixed(3), 10, 20);
+        requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
+    })();
+  ]]></script>
+</svg>

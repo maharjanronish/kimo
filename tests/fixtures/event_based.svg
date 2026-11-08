@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200">
+  <rect width="300" height="200" fill="#101820"/>
+  <circle cx="150" cy="100" r="30" fill="#e0e070">
+    <animate attributeName="r" from="30" to="80" begin="click" dur="2s" fill="freeze"/>
+  </circle>
+</svg>

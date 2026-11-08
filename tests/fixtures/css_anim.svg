@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+  <style>
+    @keyframes slide {
+      from { transform: translateX(20px); }
+      to   { transform: translateX(340px); }
+    }
+    @keyframes pulse {
+      0%   { opacity: 1; }
+      50%  { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+    .box {
+      animation: slide 2s linear infinite alternate,
+                 fade 3s linear forwards;
+    }
+    .pulse {
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes fade {
+      from { fill: #d06060; }
+      to   { fill: #6060d0; }
+    }
+  </style>
+  <rect width="400" height="300" fill="#1a1a22"/>
+  <rect class="box" x="0" y="60" width="60" height="60" fill="#d06060"/>
+  <circle class="pulse" cx="200" cy="200" r="45" fill="#60d090"/>
+</svg>
